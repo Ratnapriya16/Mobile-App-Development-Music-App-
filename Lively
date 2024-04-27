@@ -1,0 +1,134 @@
+package com.improve10x.musicapp.ui.theme
+
+
+import android.content.Intent
+import android.media.MediaPlayer
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.Coil
+import coil.compose.AsyncImage
+
+
+class LivelyActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            com.improve10x.musicapp.ui.theme.ui.theme.MusicAppTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    ExampleScreen()
+                }
+            }
+        }
+    }
+}
+
+
+data class Song(
+    val title: String,
+    val imageURL: String // You can use URL or any other way to load image
+)
+
+@Composable
+fun SongListItem(song: Song) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            AsyncImage(model = song.imageURL, contentDescription = song.title)
+            Spacer(
+                modifier = Modifier
+                    .size(10.dp)
+            )
+
+            Text(
+                text = song.title,
+                modifier = Modifier.weight(1f)
+            )
+
+            var isPlaying by remember { mutableStateOf(false) }
+
+            Icon(
+                imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                contentDescription = "Play/Pause",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clickable {
+                        isPlaying = !isPlaying
+                        // Handle play/pause action here
+                    }
+            )
+        }
+    }
+}
+
+@Composable
+fun SongList(songs: List<Song>) {
+    LazyColumn {
+        items(songs) { song ->
+            SongListItem(song = song)
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ExampleScreen() {
+    val songs = remember {
+        mutableStateOf(
+            listOf(
+                Song(
+                    "Song 1",
+                    "https://i.pinimg.com/564x/41/a0/7a/41a07a4a03c4b1c76d707b363568bb4f.jpg"
+                ),
+                Song(
+                    "Song 2",
+                    "https://i.pinimg.com/564x/ab/a4/2f/aba42f4f89c34c362e57266b6b02856f.jpg"
+                ),
+                Song(
+                    "Song 3",
+                    "https://i.pinimg.com/564x/d2/bd/c7/d2bdc7254ea6b1b685b36d00669ce931.jpg"
+                )
+                // Add more songs as needed
+            )
+        )
+    }
+    SongList(songs = songs.value)
+}
