@@ -1,0 +1,144 @@
+package com.improve10x.musicapp.ui.theme
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.improve10x.musicapp.ui.theme.ui.theme.MusicAppTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MusicAppTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MyMusicScreen(onItemClicked = {
+                        val livelyIntent = Intent(this, LivelyActivity::class.java)
+                        startActivity(livelyIntent)
+                    })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MusicTheme(title: String = "Music",
+               imageURL: String = "",
+               onItemClicked: (String) -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { 
+                onItemClicked(title)
+            }
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = imageURL,
+                contentDescription = title
+            )
+            Text(
+                text = title,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
+
+data class MusicThemes(
+    val title: String,
+    val imageURL: String
+)
+
+fun themeList(): List<MusicThemes> {
+    return listOf(
+        MusicThemes(
+            "Lively",
+            "https://i.pinimg.com/564x/19/fc/b9/19fcb9584c8a9748e3a69e09889ab6f0.jpg"
+        ),
+        MusicThemes(
+            "Dreamy",
+            "https://i.pinimg.com/564x/cf/9f/00/cf9f0059d3902bd13e74be10e1a7235b.jpg"
+        ),
+        MusicThemes(
+            "Study",
+            "https://i.pinimg.com/564x/a4/74/a4/a474a468ce7a33b288753dc6cda70118.jpg"
+        ),
+        MusicThemes(
+            "Sentimental",
+            "https://i.pinimg.com/564x/f6/05/d6/f605d6ffd205409ecd71379017fe078f.jpg"
+        ),
+        MusicThemes(
+            "Dramatic",
+            "https://i.pinimg.com/564x/ef/cf/7a/efcf7a073b2a9470979ee3ff9f76c440.jpg"
+        ),
+        MusicThemes(
+            "Nostalgic",
+            "https://i.pinimg.com/564x/30/fa/99/30fa9983971333cde5eb6c2fc55ee4cc.jpg"
+        ),
+        MusicThemes(
+            "Spirited",
+            "https://i.pinimg.com/564x/20/ba/e1/20bae188fbcb1e82220043f71683ea7c.jpg"
+        ),
+        MusicThemes(
+            "Intimate",
+            "https://i.pinimg.com/564x/a9/1f/58/a91f5851ee97cf8db0aad086bde412c1.jpg"
+        ),
+        MusicThemes(
+            "Cozy",
+            "https://i.pinimg.com/564x/4b/cc/2a/4bcc2abf088d1385052813927b759952.jpg"
+        ),
+        MusicThemes(
+            "Angry",
+            "https://i.pinimg.com/564x/c0/a4/5e/c0a45e4b77871dc327def84fc2d4d912.jpg"
+        )
+    )
+}
+
+@Preview
+@Composable
+fun MyMusicScreen(onItemClicked: (String) -> Unit = {}) {
+    val categories = themeList()
+    Column {
+        Text(
+            fontWeight = FontWeight.ExtraBold,
+            text = "Themes",
+            fontSize = 24.sp,
+            modifier = Modifier
+                .padding(16.dp)
+                .width(200.dp)
+        )
+        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+            items(categories) { item ->
+                MusicTheme(item.title, item.imageURL, onItemClicked)
+            }
+        }
+    }
+}
