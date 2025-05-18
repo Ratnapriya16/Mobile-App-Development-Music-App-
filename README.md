@@ -26,3 +26,7 @@ A simple Android-based music player application built using Kotlin. This project
 
 ```bash
 git clone https://github.com/Ratnapriya16/Mobile-App-Development-Music-App-.git
+## 🎥 Demo
+
+![App Demo](demo.gif)
+
